@@ -332,12 +332,17 @@
                     this.completedItems.clear();
                     this.emergencies = [];
                     
-                    const acData = (window.AIRCRAFT_DATA && acId !== "none") ? window.AIRCRAFT_DATA[acId] : null;
-                    this.isUnregistered = !acData;
+                    const profile = typeof window.getAircraftProfile === 'function' ? window.getAircraftProfile(ac) : null;
+                    const acData = profile || ((window.AIRCRAFT_DATA && acId !== "none") ? window.AIRCRAFT_DATA[acId] : null);
+                    this.isUnregistered = !acData || acData.isDynamic;
                     this.missingId = (acId === "none") ? null : acId;
 
                     if (acData && acData.name) {
                         this.currentAircraft = acData.name;
+                    } else if (ac.definition) {
+                        this.currentAircraft = ac.definition.externalName || ac.definition.name || "Default Checklist";
+                    } else {
+                        this.currentAircraft = "Default Checklist";
                     }
 
 
