@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.1] - V4 Integration Update
+
+- Resolves aircraft profiles dynamically and falls back to the aircraft definition for its name.
+- Fix aircraft detection when loading a profile.
+- Live GeoFS V4 validation is pending.
+
 ## [0.1.0] - V4 compatibility fixes
 
 - Waits for the shared HUD, uses V4 foundation dependencies and flight-control setters, and guards aircraft transitions.

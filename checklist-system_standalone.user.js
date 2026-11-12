@@ -103,7 +103,7 @@
 // @description:ur      عمیق تاثرات کے ساتھ ہوائی جہاز کے لیے مخصوص طریقہ کار کی چیک لسٹ۔ © 2026 AMFI-Disable. Part of the GeoFS-V4.0_Ecosystem.
 
 // @namespace           https://greasyfork.org/users/1594049
-// @version             0.1.0
+// @version             0.1.1
 // @author              AMFI-Disable
 // @homepageURL         https://sites.google.com/view/geofs-v40-ecosystem/home
 // @icon                https://www.geo-fs.com/images/icons/favicon.ico
@@ -326,7 +326,8 @@
                 }
                 if (!found) this.currentChecklist = JSON.parse(JSON.stringify(DEFAULT_CHECKLISTS["generic"]));
                 
-                const acId = geofs.aircraft.instance?.id || "none";
+                const ac = geofs.aircraft.instance;
+                const acId = ac?.id ?? "none";
                 if (window._checkCurrId !== acId) {
                     window._checkCurrId = acId;
                     this.completedItems.clear();
@@ -339,7 +340,7 @@
 
                     if (acData && acData.name) {
                         this.currentAircraft = acData.name;
-                    } else if (ac.definition) {
+                    } else if (ac?.definition) {
                         this.currentAircraft = ac.definition.externalName || ac.definition.name || "Default Checklist";
                     } else {
                         this.currentAircraft = "Default Checklist";

@@ -13,3 +13,7 @@ The standalone Checklist System module for the GeoFS-V4.0 ecosystem, unifying HU
 Install via Tampermonkey or your preferred userscript manager.
 
 [MIT](license) · © 2026 AMFI-Disable
+
+## Latest Experimental Update
+
+Resolves aircraft profiles dynamically and falls back to the aircraft definition for its name. This version targets GeoFS V4; in-simulator validation is pending.
