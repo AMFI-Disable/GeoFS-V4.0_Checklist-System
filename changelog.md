@@ -6,7 +6,7 @@
 - Fix aircraft detection when loading a profile.
 - Live GeoFS V4 validation is pending.
 
-## [0.1.0] - V4 compatibility fixes
+## [0.1.0] - V4 Compatibility Fixes
 
 - Waits for the shared HUD, uses V4 foundation dependencies and flight-control setters, and guards aircraft transitions.
 
