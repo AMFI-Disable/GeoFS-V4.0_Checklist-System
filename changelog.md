@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased - V4 compatibility fixes
+
+- Waits for the shared HUD, uses V4 foundation dependencies and flight-control setters, and guards aircraft transitions.
+
 ## [4.0.0] - GeoFS 4.0 Port & Unified V3.9 Design
 
 - Ported to GeoFS 4.0 ecosystem with dual-host support (`beta.geo-fs.com` and `www.geo-fs.com`).

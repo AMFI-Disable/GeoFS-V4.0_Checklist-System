@@ -109,8 +109,8 @@
 // @icon                https://www.geo-fs.com/images/icons/favicon.ico
 // @match               https://beta.geo-fs.com/geofs.php*
 // @match               https://www.geo-fs.com/geofs.php*
-// @require             https://update.greasyfork.org/scripts/581510/code.js
-// @require             https://update.greasyfork.org/scripts/581511/code.js
+// @require             https://update.greasyfork.org/scripts/604885/code.js
+// @require             https://update.greasyfork.org/scripts/604887/code.js
 // @grant               none
 // @license             MIT
 // @copyright           2026, AMFI-Disable (https://greasyfork.org/users/1594049)
@@ -312,7 +312,7 @@
             detectAircraft: function() {
                 let name = "Generic Aircraft";
                 if (geofs.aircraft.instance) {
-                    name = (geofs.aircraft.instance.definition.externalName || geofs.aircraft.instance.definition.name || "").toLowerCase();
+                    name = (geofs.aircraft.instance.definition?.externalName || geofs.aircraft.instance.definition?.name || "").toLowerCase();
                 }
                 this.currentAircraft = name;
                 
@@ -449,7 +449,7 @@
                 
                 const anim = geofs.animation.values;
                 const ac = geofs.aircraft.instance;
-                const maxFlaps = (ac.definition.flapsSteps || ac.definition.flapsPositions || []).length - 1;
+                const maxFlaps = Number.isFinite(ac.definition?.flapsSteps) ? ac.definition.flapsSteps : Math.max(0, (ac.definition?.flapsPositions?.length || 1) - 1);
 
                 const getSyncState = (syncStr) => {
                     if (!syncStr) return false;
@@ -459,13 +459,13 @@
                     
                     switch(key) {
                         case 'parkingBrake': return !!anim.parkingBrake;
-                        case 'gear': return anim.gear > 0.5;
+                        case 'gear': return anim.gearPosition > 0.5;
                         case 'lights': return !!(anim.lights || ac.lights);
-                        case 'airbrakes': return anim.airbrakes > 0;
+                        case 'airbrakes': return anim.airbrakesPosition > 0;
                         case 'flaps': {
                             const target = anim.flapsTarget || 0;
                             // Physical Logic: Robust flap detection across different airframe definitions
-                            let effectiveMax = (acData && acData.maxFlaps !== undefined) ? acData.maxFlaps : (ac.definition.flapsSteps ? ac.definition.flapsSteps.length - 1 : (ac.definition.flapsPositions ? ac.definition.flapsPositions.length - 1 : 1));
+                            let effectiveMax = maxFlaps || ((acData && acData.maxFlaps) || 1);
                             if (effectiveMax < 1) effectiveMax = 1;
 
                             if (val === 'full') return target >= effectiveMax;
@@ -536,7 +536,7 @@
                 const ac = geofs.aircraft.instance;
                 const anim = geofs.animation.values;
                 const [key, val] = syncStr.split(':');
-                const maxFlaps = ac.definition.flapsSteps ? ac.definition.flapsSteps.length - 1 : 1;
+                const maxFlaps = Number.isFinite(ac.definition?.flapsSteps) ? ac.definition.flapsSteps : Math.max(0, (ac.definition?.flapsPositions?.length || 1) - 1);
                 
                 switch(key) {
                     case 'parkingBrake':
@@ -548,22 +548,20 @@
                         break;
                     case 'gear':
                         // Handle gear toggle more safely
-                        if (ac.toggleGear) ac.toggleGear();
-                        else if (anim.gear !== undefined) {
-                            geofs.animation.values.gear = anim.gear > 0.5 ? 0 : 1;
-                        }
+                        if (typeof controls !== 'undefined' && controls.setters?.setGear?.set) controls.setters.setGear.set();
                         break;
                     case 'flaps': {
                         const acId = geofs.aircraft.instance?.id;
                         const acData = (window.AIRCRAFT_DATA && acId) ? window.AIRCRAFT_DATA[acId] : null;
-                        let actionMax = (acData && acData.maxFlaps !== undefined) ? acData.maxFlaps : maxFlaps;
+                        let actionMax = maxFlaps || ((acData && acData.maxFlaps) || 0);
                         if (actionMax < 1) actionMax = 1;
 
-                        if (val === 'full') ac.setFlaps(actionMax);
-                        else if (val !== undefined) ac.setFlaps(parseInt(val));
-                        else {
-                            const cur = anim.flapsTarget || 0;
-                            ac.setFlaps(cur === 0 ? (actionMax > 1 ? 1 : 1) : 0);
+                        if (typeof controls !== 'undefined' && controls.flaps && controls.setters?.setFlaps?.set) {
+                            const target = val === 'full' ? actionMax : val !== undefined ? Number.parseInt(val, 10) : (anim.flapsTarget ? 0 : 1);
+                            if (Number.isFinite(target)) {
+                                controls.flaps.target = Math.max(0, Math.min(maxFlaps, target));
+                                controls.setters.setFlaps.set();
+                            }
                         }
                         break;
                     }
@@ -599,11 +597,13 @@
         }, 3000);
     };
 
-    if (window.SafeInit) {
-        window.SafeInit('GeoFS-V4.0_Checklist-System', window.initChecklistSystem);
-    } else {
-        window.initChecklistSystem();
-    }
+    const bootChecker = setInterval(() => {
+        if (isUnsupportedGeoFS()) { clearInterval(bootChecker); return; }
+        if (typeof window.registerHUDTab !== 'function') return;
+        clearInterval(bootChecker);
+        if (window.SafeInit) window.SafeInit('GeoFS-V4.0_Checklist-System', window.initChecklistSystem);
+        else window.initChecklistSystem();
+    }, 100);
 })();
 
 })();
