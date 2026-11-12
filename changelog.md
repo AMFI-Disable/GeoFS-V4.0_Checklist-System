@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased - V4 compatibility fixes
+## [0.1.0] - V4 compatibility fixes
 
 - Waits for the shared HUD, uses V4 foundation dependencies and flight-control setters, and guards aircraft transitions.
 
