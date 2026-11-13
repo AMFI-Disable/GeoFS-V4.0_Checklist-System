@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.1.2] - Control Synchronization
+
+- Toggle the parking brake using GeoFS V4 controls and respect the aircraft profile flap limit.
+
 ## [0.1.1] - V4 Integration Update
 
 - Resolves aircraft profiles dynamically and falls back to the aircraft definition for its name.

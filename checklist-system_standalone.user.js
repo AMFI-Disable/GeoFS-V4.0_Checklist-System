@@ -103,7 +103,7 @@
 // @description:ur      عمیق تاثرات کے ساتھ ہوائی جہاز کے لیے مخصوص طریقہ کار کی چیک لسٹ۔ © 2026 AMFI-Disable. Part of the GeoFS-V4.0_Ecosystem.
 
 // @namespace           https://greasyfork.org/users/1594049
-// @version             0.1.1
+// @version             0.1.2
 // @author              AMFI-Disable
 // @homepageURL         https://sites.google.com/view/geofs-v40-ecosystem/home
 // @icon                https://www.geo-fs.com/images/icons/favicon.ico
@@ -546,10 +546,8 @@
                 
                 switch(key) {
                     case 'parkingBrake':
-                        if (typeof controls !== 'undefined' && controls.setters && controls.setters.setParkingBrake) {
-                            controls.setters.setParkingBrake.set();
-                        } else {
-                            geofs.animation.values.parkingBrake = geofs.animation.values.parkingBrake ? 0 : 1;
+                        if (typeof controls !== 'undefined' && controls.setters?.toggleParkingBrake?.set) {
+                            controls.setters.toggleParkingBrake.set();
                         }
                         break;
                     case 'gear':
@@ -565,7 +563,7 @@
                         if (typeof controls !== 'undefined' && controls.flaps && controls.setters?.setFlaps?.set) {
                             const target = val === 'full' ? actionMax : val !== undefined ? Number.parseInt(val, 10) : (anim.flapsTarget ? 0 : 1);
                             if (Number.isFinite(target)) {
-                                controls.flaps.target = Math.max(0, Math.min(maxFlaps, target));
+                                controls.flaps.target = Math.max(0, Math.min(actionMax, target));
                                 controls.setters.setFlaps.set();
                             }
                         }
