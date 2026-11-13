@@ -1,8 +1,16 @@
 # Changelog
 
-## [0.1.2] - Control Synchronization
+All notable changes, features, and architectural capabilities of this project are documented in this file.
 
-- Toggle the parking brake using GeoFS V4 controls and respect the aircraft profile flap limit.
+---
+
+## [Unreleased]
+
+### Fixed
+
+- **Control Synchronization**: Standardized parking brake toggling to use GeoFS V4 control setters (`controls.setters?.toggleParkingBrake?.set`) and respected aircraft profile flap limits (`checklist-system_standalone.user.js`).
+
+---
 
 ## [0.1.1] - V4 Integration Update
 
