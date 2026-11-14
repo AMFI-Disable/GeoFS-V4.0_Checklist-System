@@ -103,7 +103,7 @@
 // @description:ur      عمیق تاثرات کے ساتھ ہوائی جہاز کے لیے مخصوص طریقہ کار کی چیک لسٹ۔ © 2026 AMFI-Disable. Part of the GeoFS-V4.0_Ecosystem.
 
 // @namespace           https://greasyfork.org/users/1594049
-// @version             0.1.2
+// @version             1.0.0
 // @author              AMFI-Disable
 // @homepageURL         https://sites.google.com/view/geofs-v40-ecosystem/home
 // @icon                https://www.geo-fs.com/images/icons/favicon.ico
@@ -120,6 +120,7 @@
 // @compatible          safari
 // @compatible          brave
 // @compatible          opera
+// @run-at              document-idle
 // ==/UserScript==
 
 // Wait for GeoFS to report its version before executing any module code.
